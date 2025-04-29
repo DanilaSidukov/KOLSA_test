@@ -1,20 +1,20 @@
 package com.diphrogram.data.converter
 
 import com.diphrogram.data.models.workouts.WorkoutType
-import com.diphrogram.data.models.workouts.WorkoutsItem
+import com.diphrogram.data.models.workouts.WorkoutItem
 import com.diphrogram.domain.models.workouts.WorkoutsDto
 import javax.inject.Inject
 
 interface DataConverter {
 
-    fun convertWorkoutsList(list: List<WorkoutsDto>): List<WorkoutsItem>
+    fun convertWorkoutsList(list: List<WorkoutsDto>): List<WorkoutItem>
 }
 
 internal class DataConverterImpl @Inject constructor() : DataConverter {
 
-    override fun convertWorkoutsList(list: List<WorkoutsDto>): List<WorkoutsItem> {
+    override fun convertWorkoutsList(list: List<WorkoutsDto>): List<WorkoutItem> {
         val workoutsList = list.map { item ->
-            WorkoutsItem(
+            WorkoutItem(
                 id = item.id,
                 title = item.title,
                 type = getWorkoutType(item.type),

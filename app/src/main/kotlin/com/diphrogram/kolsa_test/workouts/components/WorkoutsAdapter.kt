@@ -10,7 +10,7 @@ import com.diphrogram.data.models.workouts.WorkoutType.Another
 import com.diphrogram.data.models.workouts.WorkoutType.ExerciseSet
 import com.diphrogram.data.models.workouts.WorkoutType.Live
 import com.diphrogram.data.models.workouts.WorkoutType.Workout
-import com.diphrogram.data.models.workouts.WorkoutsItem
+import com.diphrogram.data.models.workouts.WorkoutItem
 import com.diphrogram.kolsa_test.R
 import com.diphrogram.kolsa_test.databinding.WorkoutsItemBinding
 
@@ -24,14 +24,14 @@ class WorkoutsAdapter(
 ) : RecyclerView.Adapter<WorkoutsAdapter.ViewHolder>() {
 
     private lateinit var context: Context
-    private val workoutsList = mutableListOf<WorkoutsItem>()
+    private val workoutsList = mutableListOf<WorkoutItem>()
 
     inner class ViewHolder(private val binding: WorkoutsItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: WorkoutsItem) {
+        fun bind(item: WorkoutItem) {
             val workoutType = getTypeData(item.type)
             with(binding) {
-                name.text = context.getString(R.string.workout_name, item.title)
+                title.text = context.getString(R.string.workout_name, item.title)
                 type.text = context.getString(R.string.workout_type, workoutType)
                 duration.text = context.getString(R.string.duration, item.duration)
                 description.text = item.description
@@ -57,7 +57,7 @@ class WorkoutsAdapter(
 
     override fun getItemCount(): Int = workoutsList.size
 
-    fun submitList(newList: List<WorkoutsItem>) {
+    fun submitList(newList: List<WorkoutItem>) {
         workoutsList.clear()
         workoutsList.addAll(newList)
         notifyDataSetChanged()

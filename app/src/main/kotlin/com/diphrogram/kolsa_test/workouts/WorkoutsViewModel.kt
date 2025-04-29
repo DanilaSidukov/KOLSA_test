@@ -44,7 +44,10 @@ class WorkoutsViewModel @Inject constructor (
                 if (!result.isNullOrEmpty()) {
                     val workoutsList = dataConverter.convertWorkoutsList(result)
                     setState {
-                        copy(workoutsList = workoutsList)
+                        copy(
+                            workoutsList = workoutsList,
+                            filteredList = workoutsList
+                        )
                     }
                 } else {
                     setState {
@@ -59,6 +62,20 @@ class WorkoutsViewModel @Inject constructor (
                 screenState = if (response is Loading) ScreenState.LoadingProcess
                 else ScreenState.LoadingComplete
             )
+        }
+    }
+
+    fun filterListByTitle(text: String) {
+        setState {
+            if (text.isBlank()) {
+                copy(filteredList = workoutsList)
+            } else {
+                copy(
+                    filteredList = workoutsList.filter {
+                        it.title.contains(text, ignoreCase = true)
+                    }
+                )
+            }
         }
     }
 }

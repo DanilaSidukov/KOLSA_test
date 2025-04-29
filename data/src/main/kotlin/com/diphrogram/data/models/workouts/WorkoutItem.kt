@@ -1,6 +1,6 @@
 package com.diphrogram.data.models.workouts
 
-data class WorkoutsItem(
+data class WorkoutItem(
     val description: String?,
     val duration: String,
     val id: Int,
