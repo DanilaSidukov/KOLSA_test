@@ -13,7 +13,8 @@
     <string name="live">Эфир</string>
     <string name="set">Комплекс</string>
     <string name="another">Другое</string>
+    <string name="all">Все</string>
     <string name="something_went_wrong">Что-то пошло не так</string>
     <string name="input_workout_name">Введите название тренировки</string>
-    <string name="filter">Фильтр: </string>
+    <string name="filter">Фильтр: %1$s</string>
 </resources>

@@ -11,7 +11,9 @@ import com.diphrogram.kolsa_test.R
 import com.diphrogram.kolsa_test.common.BaseFragment
 import com.diphrogram.kolsa_test.common.ScreenState
 import com.diphrogram.kolsa_test.databinding.FragmentWorkoutsBinding
+import com.diphrogram.kolsa_test.workouts.components.FilterBottomSheetDialog
 import com.diphrogram.kolsa_test.workouts.components.ItemDecoration
+import com.diphrogram.kolsa_test.workouts.components.OnFilterClickListener
 import com.diphrogram.kolsa_test.workouts.components.WorkoutClickListener
 import com.diphrogram.kolsa_test.workouts.components.WorkoutsAdapter
 import com.diphrogram.utils.EMPTY
@@ -21,7 +23,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class WorkoutsFragment: BaseFragment<FragmentWorkoutsBinding>(
     FragmentWorkoutsBinding::inflate
-), WorkoutClickListener {
+), WorkoutClickListener, OnFilterClickListener {
 
     private val viewModel: WorkoutsViewModel by viewModels()
     private val workoutsAdapter = WorkoutsAdapter(this)
@@ -41,10 +43,18 @@ class WorkoutsFragment: BaseFragment<FragmentWorkoutsBinding>(
             clearIcon.setOnClickListener {
                 searchField.text.clear()
             }
-            searchField.doOnTextChanged { text, start, before, count ->
+            searchField.doOnTextChanged { text, _, _, _ ->
                 val input = text ?: String.EMPTY
                 println("input: $input")
                 viewModel.filterListByTitle(input.toString())
+            }
+            filter.text = requireContext().getString(R.string.filter, requireContext().getString(R.string.all))
+            filter.setOnClickListener {
+                val modal = FilterBottomSheetDialog()
+                modal.setOnFilterSelectedListener(this@WorkoutsFragment)
+                parentFragmentManager.let { manager ->
+                    modal.show(manager, FilterBottomSheetDialog.TAG)
+                }
             }
         }
     }
@@ -56,7 +66,7 @@ class WorkoutsFragment: BaseFragment<FragmentWorkoutsBinding>(
                 when(state.screenState) {
                     ScreenState.LoadingComplete -> {
                         workoutsAdapter.submitList(state.filteredList)
-                        setUIsVisibility(state.error)
+                        setUIsVisibility(state)
                     }
                     else -> Unit
                 }
@@ -71,21 +81,29 @@ class WorkoutsFragment: BaseFragment<FragmentWorkoutsBinding>(
         }
     }
 
-    private fun setUIsVisibility(error: String) {
-        val uiVisible = error.isEmpty()
+    private fun setUIsVisibility(state: WorkoutsFragmentState) {
+        val uiVisible = state.error.isEmpty()
         with(binding) {
             textInfo.isVisible = !uiVisible
             searchLayout.isVisible = uiVisible
             filter.isVisible = uiVisible
             if (!uiVisible) {
-                textInfo.text = requireContext().getString(R.string.error, error)
+                textInfo.text = requireContext().getString(R.string.error, state.error)
                 searchField.visibility = View.GONE
                 filter.visibility = View.GONE
+            } else {
+                val type = getWorkoutTypeValue(requireContext(), state.currentFilterType)
+                filter.text = requireContext().getString(R.string.filter, type)
             }
         }
     }
 
     override fun onWorkoutClick(id: Int) {
         println("Click")
+    }
+
+    override fun onFilterItemClick(selectedFilter: String) {
+        val workoutType = getWorkoutType(requireContext(), selectedFilter)
+        viewModel.filterListByType(workoutType)
     }
 }

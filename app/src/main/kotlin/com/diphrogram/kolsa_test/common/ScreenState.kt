@@ -1,6 +1,6 @@
 package com.diphrogram.kolsa_test.common
 
-enum class ScreenState {
-    LoadingProcess,
-    LoadingComplete
+sealed interface ScreenState {
+    data object LoadingProcess : ScreenState
+    data object LoadingComplete : ScreenState
 }

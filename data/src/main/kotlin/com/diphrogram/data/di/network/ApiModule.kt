@@ -1,7 +1,8 @@
 package com.diphrogram.data.di.network
 
 import com.diphrogram.data.BuildConfig
-import com.diphrogram.domain.Api
+import com.diphrogram.domain.VideoApi
+import com.diphrogram.domain.WorkoutsApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,9 +34,9 @@ internal class ApiModule {
 
     @Provides
     @Singleton
-    fun provideApi(
+    fun provideWorkoutsApi(
         client: OkHttpClient
-    ): Api {
+    ): WorkoutsApi {
         val baseUrl = BuildConfig.BASE_URL
 
         val retrofit = Retrofit.Builder()
@@ -44,7 +45,24 @@ internal class ApiModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        return retrofit.create(Api::class.java)
+        return retrofit.create(WorkoutsApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideVideoApi(
+        client: OkHttpClient
+    ): VideoApi {
+
+        val baseUrl = BuildConfig.BASE_URL
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        return retrofit.create(VideoApi::class.java)
     }
 }
 

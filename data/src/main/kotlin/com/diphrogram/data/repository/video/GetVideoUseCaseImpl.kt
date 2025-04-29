@@ -1,7 +1,7 @@
 package com.diphrogram.data.repository.video
 
-import com.diphrogram.domain.models.video.VideoDto
-import com.diphrogram.domain.repository.WorkoutRepository
+import com.diphrogram.domain.models.video.Video
+import com.diphrogram.domain.repository.VideoRepository
 import com.diphrogram.domain.repository.video.GetVideoUseCase
 import com.diphrogram.utils.network.Response
 import kotlinx.coroutines.Dispatchers
@@ -10,10 +10,10 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 internal class GetVideoUseCaseImpl @Inject constructor(
-    private val repository: WorkoutRepository
+    private val repository: VideoRepository
 ): GetVideoUseCase {
 
-    override suspend fun invoke(id: Int): Flow<Response<VideoDto>> = withContext(Dispatchers.IO) {
+    override suspend fun invoke(id: Int): Flow<Response<Video>> = withContext(Dispatchers.IO) {
         repository.getVideo(id)
     }
 }

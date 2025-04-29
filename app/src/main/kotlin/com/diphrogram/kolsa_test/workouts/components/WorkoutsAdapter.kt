@@ -5,14 +5,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import com.diphrogram.data.models.workouts.WorkoutType
-import com.diphrogram.data.models.workouts.WorkoutType.Another
-import com.diphrogram.data.models.workouts.WorkoutType.ExerciseSet
-import com.diphrogram.data.models.workouts.WorkoutType.Live
-import com.diphrogram.data.models.workouts.WorkoutType.Workout
 import com.diphrogram.data.models.workouts.WorkoutItem
 import com.diphrogram.kolsa_test.R
 import com.diphrogram.kolsa_test.databinding.WorkoutsItemBinding
+import com.diphrogram.kolsa_test.workouts.getWorkoutTypeValue
 
 interface WorkoutClickListener {
 
@@ -29,7 +25,7 @@ class WorkoutsAdapter(
     inner class ViewHolder(private val binding: WorkoutsItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: WorkoutItem) {
-            val workoutType = getTypeData(item.type)
+            val workoutType = getWorkoutTypeValue(context, item.type)
             with(binding) {
                 title.text = context.getString(R.string.workout_name, item.title)
                 type.text = context.getString(R.string.workout_type, workoutType)
@@ -61,16 +57,5 @@ class WorkoutsAdapter(
         workoutsList.clear()
         workoutsList.addAll(newList)
         notifyDataSetChanged()
-    }
-
-    private fun getTypeData(workoutType: WorkoutType): String {
-        return with(context) {
-            when (workoutType) {
-                Workout -> getString(R.string.workout)
-                Live -> getString(R.string.live)
-                ExerciseSet -> getString(R.string.set)
-                Another -> getString(R.string.another)
-            }
-        }
     }
 }

@@ -78,13 +78,12 @@
 
     </LinearLayout>
 
-
-
     <TextView
         android:visibility="gone"
         android:id="@+id/filter"
         app:drawableEndCompat="@drawable/ic_sort"
         android:drawablePadding="12dp"
+        android:paddingBottom="12dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/search_layout"
         android:layout_width="wrap_content"

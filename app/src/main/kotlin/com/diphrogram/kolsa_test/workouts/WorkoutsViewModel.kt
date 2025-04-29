@@ -2,7 +2,8 @@ package com.diphrogram.kolsa_test.workouts
 
 import androidx.lifecycle.viewModelScope
 import com.diphrogram.data.converter.DataConverter
-import com.diphrogram.domain.models.workouts.WorkoutsDto
+import com.diphrogram.data.models.workouts.WorkoutType
+import com.diphrogram.domain.models.workouts.Workouts
 import com.diphrogram.domain.repository.workouts.GetWorkoutsUseCase
 import com.diphrogram.kolsa_test.common.BaseViewModel
 import com.diphrogram.kolsa_test.common.ScreenState
@@ -32,16 +33,16 @@ class WorkoutsViewModel @Inject constructor (
         getWorkoutsUseCase().collect(::handleWorkoutResponse)
     }
 
-    private fun handleWorkoutResponse(response: Response<List<WorkoutsDto>>) {
+    private fun handleWorkoutResponse(response: Response<List<Workouts>>) {
         when(response) {
             is Error -> {
                 setState {
-                    copy(error = response.message ?: resourceProvider.somethingWentWrong)
+                    copy(error = response.message)
                 }
             }
             is Success -> {
                 val result = response.data
-                if (!result.isNullOrEmpty()) {
+                if (result.isNotEmpty()) {
                     val workoutsList = dataConverter.convertWorkoutsList(result)
                     setState {
                         copy(
@@ -65,17 +66,31 @@ class WorkoutsViewModel @Inject constructor (
         }
     }
 
-    fun filterListByTitle(text: String) {
+    fun filterListByTitle(title: String) {
         setState {
-            if (text.isBlank()) {
-                copy(filteredList = workoutsList)
-            } else {
-                copy(
-                    filteredList = workoutsList.filter {
-                        it.title.contains(text, ignoreCase = true)
-                    }
-                )
-            }
+            copy(currentSearchText = title)
+        }
+        applyFilters()
+    }
+
+    fun filterListByType(type: WorkoutType) {
+        setState {
+            copy(currentFilterType = type)
+        }
+        applyFilters()
+    }
+
+    private fun applyFilters() {
+        val originalList = state.value.workoutsList
+        val searchText = state.value.currentSearchText
+        val filterType = state.value.currentFilterType
+
+        val filtered = originalList
+            .filter { it.title.contains(searchText, ignoreCase = true) }
+            .filter { filterType == WorkoutType.ALL || it.type == filterType }
+
+        setState {
+            copy(filteredList = filtered)
         }
     }
 }

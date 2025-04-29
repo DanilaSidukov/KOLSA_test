@@ -1,6 +1,6 @@
 package com.diphrogram.data.repository.workouts
 
-import com.diphrogram.domain.models.workouts.WorkoutsDto
+import com.diphrogram.domain.models.workouts.Workouts
 import com.diphrogram.domain.repository.WorkoutRepository
 import com.diphrogram.domain.repository.workouts.GetWorkoutsUseCase
 import com.diphrogram.utils.network.Response
@@ -13,7 +13,7 @@ internal class GetWorkoutsUseCaseImpl @Inject constructor(
     private val repository: WorkoutRepository
 ): GetWorkoutsUseCase {
 
-    override suspend fun invoke(): Flow<Response<List<WorkoutsDto>>> = withContext(Dispatchers.IO){
+    override suspend fun invoke(): Flow<Response<List<Workouts>>> = withContext(Dispatchers.IO){
         repository.getWorkouts()
     }
 }

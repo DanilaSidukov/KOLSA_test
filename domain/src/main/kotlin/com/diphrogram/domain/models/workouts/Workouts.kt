@@ -4,7 +4,7 @@ import com.diphrogram.utils.EMPTY
 import com.diphrogram.utils.ZERO
 import com.google.gson.annotations.SerializedName
 
-data class WorkoutsDto(
+data class Workouts(
     @SerializedName("description")
     val description: String? = null,
     @SerializedName("duration")
