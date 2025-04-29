@@ -4,7 +4,6 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.diphrogram.data.models.workouts.WorkoutType
 import com.diphrogram.data.models.workouts.WorkoutType.Another
@@ -22,9 +21,10 @@ interface WorkoutClickListener {
 
 class WorkoutsAdapter(
     private val listener: WorkoutClickListener
-): ListAdapter<WorkoutsItem, WorkoutsAdapter.ViewHolder>(WorkoutsDiffCallback()) {
+) : RecyclerView.Adapter<WorkoutsAdapter.ViewHolder>() {
 
     private lateinit var context: Context
+    private val workoutsList = mutableListOf<WorkoutsItem>()
 
     inner class ViewHolder(private val binding: WorkoutsItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
@@ -35,7 +35,6 @@ class WorkoutsAdapter(
                 type.text = context.getString(R.string.workout_type, workoutType)
                 duration.text = context.getString(R.string.duration, item.duration)
                 description.text = item.description
-
                 description.isVisible = item.description != null
 
                 root.setOnClickListener {
@@ -46,18 +45,22 @@ class WorkoutsAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = WorkoutsItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        context = parent.context
+        val binding = WorkoutsItemBinding.inflate(LayoutInflater.from(context), parent, false)
         return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = getItem(position)
+        val item = workoutsList[position]
         holder.bind(item)
     }
 
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        super.onAttachedToRecyclerView(recyclerView)
-        context = recyclerView.context
+    override fun getItemCount(): Int = workoutsList.size
+
+    fun submitList(newList: List<WorkoutsItem>) {
+        workoutsList.clear()
+        workoutsList.addAll(newList)
+        notifyDataSetChanged()
     }
 
     private fun getTypeData(workoutType: WorkoutType): String {
