@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">KOLSA_test</string>
+    <string name="workouts_list">Список тренировок</string>
+    <string name="workout_name">Название: %1$s</string>
+    <string name="workout_type">Тип: %1$s</string>
+    <string name="duration">Длительность: %1$s мин</string>
+    <string name="workout">Тренировка</string>
+    <string name="live">Эфир</string>
+    <string name="set">Комплекс</string>
+    <string name="another">Другое</string>
+    <string name="empty_result">Ничего не найдено :(</string>
+    <string name="error">Ошибка: %1$s</string>
+    <string name="something_went_wrong">Что-то пошло не так</string>
+</resources>
