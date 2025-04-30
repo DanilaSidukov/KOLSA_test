@@ -1,4 +1,4 @@
-package com.diphrogram.kolsa_test.workouts
+package com.diphrogram.kolsa_test.presentation.workouts
 
 import android.content.Context
 import com.diphrogram.data.models.workouts.WorkoutType

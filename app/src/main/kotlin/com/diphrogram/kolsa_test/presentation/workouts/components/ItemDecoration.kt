@@ -1,4 +1,4 @@
-package com.diphrogram.kolsa_test.workouts.components
+package com.diphrogram.kolsa_test.presentation.workouts.components
 
 import android.graphics.Rect
 import android.view.View

@@ -1,4 +1,4 @@
-package com.diphrogram.kolsa_test.workouts
+package com.diphrogram.kolsa_test.presentation.workouts
 
 import android.os.Bundle
 import android.view.View
@@ -11,11 +11,12 @@ import com.diphrogram.kolsa_test.R
 import com.diphrogram.kolsa_test.common.BaseFragment
 import com.diphrogram.kolsa_test.common.ScreenState
 import com.diphrogram.kolsa_test.databinding.FragmentWorkoutsBinding
-import com.diphrogram.kolsa_test.workouts.components.FilterBottomSheetDialog
-import com.diphrogram.kolsa_test.workouts.components.ItemDecoration
-import com.diphrogram.kolsa_test.workouts.components.OnFilterClickListener
-import com.diphrogram.kolsa_test.workouts.components.WorkoutClickListener
-import com.diphrogram.kolsa_test.workouts.components.WorkoutsAdapter
+import com.diphrogram.kolsa_test.presentation.video.VideoFragment
+import com.diphrogram.kolsa_test.presentation.workouts.components.FilterBottomSheetDialog
+import com.diphrogram.kolsa_test.presentation.workouts.components.ItemDecoration
+import com.diphrogram.kolsa_test.presentation.workouts.components.OnFilterClickListener
+import com.diphrogram.kolsa_test.presentation.workouts.components.WorkoutClickListener
+import com.diphrogram.kolsa_test.presentation.workouts.components.WorkoutsAdapter
 import com.diphrogram.utils.EMPTY
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -81,7 +82,7 @@ class WorkoutsFragment: BaseFragment<FragmentWorkoutsBinding>(
         }
     }
 
-    private fun setUIsVisibility(state: WorkoutsFragmentState) {
+    private fun setUIsVisibility(state: WorkoutsModelState) {
         val uiVisible = state.error.isEmpty()
         with(binding) {
             textInfo.isVisible = !uiVisible
@@ -98,8 +99,13 @@ class WorkoutsFragment: BaseFragment<FragmentWorkoutsBinding>(
         }
     }
 
-    override fun onWorkoutClick(id: Int) {
-        println("Click")
+    override fun onWorkoutClick(id: Int, title: String, description: String?) {
+        val videoFragment = VideoFragment.newInstance(id, title, description)
+        parentFragmentManager.beginTransaction().apply {
+            replace(R.id.container, videoFragment)
+            addToBackStack(null)
+            commit()
+        }
     }
 
     override fun onFilterItemClick(selectedFilter: String) {

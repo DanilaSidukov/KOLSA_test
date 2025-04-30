@@ -1,12 +1,13 @@
-package com.diphrogram.kolsa_test
+package com.diphrogram.kolsa_test.presentation
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.diphrogram.kolsa_test.R
 import com.diphrogram.kolsa_test.databinding.ActivityMainBinding
-import com.diphrogram.kolsa_test.workouts.WorkoutsFragment
+import com.diphrogram.kolsa_test.presentation.workouts.WorkoutsFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

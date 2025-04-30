@@ -1,4 +1,4 @@
-package com.diphrogram.kolsa_test.workouts
+package com.diphrogram.kolsa_test.presentation.workouts
 
 import androidx.lifecycle.viewModelScope
 import com.diphrogram.data.converter.DataConverter
@@ -21,9 +21,9 @@ class WorkoutsViewModel @Inject constructor (
     private val getWorkoutsUseCase: GetWorkoutsUseCase,
     private val dataConverter: DataConverter,
     private val resourceProvider: ResourceProvider
-): BaseViewModel<WorkoutsFragmentState>() {
+): BaseViewModel<WorkoutsModelState>() {
 
-    override fun createInitialState() = WorkoutsFragmentState()
+    override fun createInitialState() = WorkoutsModelState()
 
     init {
         getWorkouts()
