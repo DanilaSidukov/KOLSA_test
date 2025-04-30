@@ -8,8 +8,6 @@ import javax.inject.Inject
 interface ResourceProvider {
 
     val emptyResult: String
-
-    val somethingWentWrong: String
 }
 
 class ResourceProviderImpl @Inject constructor(
@@ -17,6 +15,4 @@ class ResourceProviderImpl @Inject constructor(
 ): ResourceProvider {
 
     override val emptyResult = context.getString(R.string.empty_result)
-
-    override val somethingWentWrong = context.getString(R.string.something_went_wrong)
 }

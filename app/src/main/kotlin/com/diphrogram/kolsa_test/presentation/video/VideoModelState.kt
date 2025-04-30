@@ -10,8 +10,7 @@ import com.diphrogram.utils.EMPTY
 data class VideoModelState(
     val error: String = String.EMPTY,
     val screenState: ScreenState = ScreenState.LoadingProcess,
-    val url: String = String.EMPTY,
-    val tracksInfo: TracksInfo = TracksInfo()
+    val url: String = String.EMPTY
 )
 
 @OptIn(UnstableApi::class)

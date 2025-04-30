@@ -1,7 +1,7 @@
 package com.diphrogram.kolsa_test.presentation.workouts
 
 import androidx.lifecycle.viewModelScope
-import com.diphrogram.data.converter.DataConverter
+import com.diphrogram.data.converter.toUIList
 import com.diphrogram.data.models.workouts.WorkoutType
 import com.diphrogram.domain.models.workouts.Workouts
 import com.diphrogram.domain.network.Response
@@ -19,7 +19,6 @@ import javax.inject.Inject
 @HiltViewModel
 class WorkoutsViewModel @Inject constructor (
     private val getWorkoutsUseCase: GetWorkoutsUseCase,
-    private val dataConverter: DataConverter,
     private val resourceProvider: ResourceProvider
 ): BaseViewModel<WorkoutsModelState>() {
 
@@ -43,7 +42,7 @@ class WorkoutsViewModel @Inject constructor (
             is Success -> {
                 val result = response.data
                 if (result.isNotEmpty()) {
-                    val workoutsList = dataConverter.convertWorkoutsList(result)
+                    val workoutsList = result.toUIList()
                     setState {
                         copy(
                             workoutsList = workoutsList,

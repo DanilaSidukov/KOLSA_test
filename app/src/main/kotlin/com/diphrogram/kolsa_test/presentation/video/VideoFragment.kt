@@ -1,5 +1,6 @@
 package com.diphrogram.kolsa_test.presentation.video
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
@@ -7,9 +8,13 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.MediaItem
+import androidx.media3.common.PlaybackParameters
 import androidx.media3.common.Player
+import androidx.media3.common.TrackSelectionOverride
 import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.DefaultRenderersFactory
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.trackselection.DefaultTrackSelector
 import com.diphrogram.kolsa_test.R
 import com.diphrogram.kolsa_test.databinding.FragmentVideoBinding
 import com.diphrogram.kolsa_test.presentation.common.BaseFragment
@@ -27,11 +32,12 @@ class VideoFragment: BaseFragment<FragmentVideoBinding>(
     private val viewModel: VideoViewModel by viewModels()
 
     private lateinit var exoPlayer: ExoPlayer
+    private lateinit var trackSelector: DefaultTrackSelector
     private var tracksInfo: TracksInfo? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        exoPlayer = viewModel.buildExoPlayer(requireContext())
+        exoPlayer = buildExoPlayer(requireContext())
         exoPlayer.addListener(this)
         arguments?.getInt(ID_ARG)?.let { id ->
             viewModel.getVideo(id)
@@ -52,7 +58,7 @@ class VideoFragment: BaseFragment<FragmentVideoBinding>(
 
         qualityButton.setOnClickListener {
             if (tracksInfo == null) {
-                tracksInfo = viewModel.getTracksInfo()
+                tracksInfo = viewModel.getTracksInfo(trackSelector)
             }
             tracksInfo?.let { info ->
                 showQualitySelectorDialog(info)
@@ -123,6 +129,27 @@ class VideoFragment: BaseFragment<FragmentVideoBinding>(
         }
     }
 
+    private fun buildExoPlayer(context: Context): ExoPlayer {
+        trackSelector = DefaultTrackSelector(context)
+        trackSelector.setParameters(
+            trackSelector.buildUponParameters()
+                .setMaxVideoSizeSd()
+        )
+
+        val renderFactory = DefaultRenderersFactory(context)
+            .setEnableDecoderFallback(true)
+
+        val player = ExoPlayer.Builder(context)
+            .setRenderersFactory(renderFactory)
+            .setTrackSelector(trackSelector)
+            .setSeekBackIncrementMs(SEEK_VALUE)
+            .setSeekForwardIncrementMs(SEEK_VALUE)
+            .build()
+
+        player.playbackParameters = PlaybackParameters(1f)
+        return player
+    }
+
     private fun showQualitySelectorDialog(tracksInfo: TracksInfo) {
         AlertDialog.Builder(requireContext())
             .setTitle(requireContext().getString(R.string.choose_video_quality))
@@ -130,10 +157,17 @@ class VideoFragment: BaseFragment<FragmentVideoBinding>(
                 if (index != Int.ZERO) {
                     val realIndex = index - 1
                     tracksInfo.trackFormats[realIndex]
-                    viewModel.setTrackSelector(tracksInfo, realIndex)
+                    setTrackSelector(tracksInfo, realIndex)
                 }
             }
             .show()
+    }
+
+    private fun setTrackSelector(tracksInfo: TracksInfo, index: Int) {
+        val parameters = trackSelector.buildUponParameters()
+            .setOverrideForType(TrackSelectionOverride(tracksInfo.trackGroups[index], index))
+            .build()
+        trackSelector.parameters = parameters
     }
 
     companion object {
@@ -154,3 +188,5 @@ class VideoFragment: BaseFragment<FragmentVideoBinding>(
         }
     }
 }
+
+private const val SEEK_VALUE = 3000L
