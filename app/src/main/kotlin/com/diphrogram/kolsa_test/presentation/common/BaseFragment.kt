@@ -1,4 +1,4 @@
-package com.diphrogram.kolsa_test.common
+package com.diphrogram.kolsa_test.presentation.common
 
 import android.os.Bundle
 import android.view.LayoutInflater

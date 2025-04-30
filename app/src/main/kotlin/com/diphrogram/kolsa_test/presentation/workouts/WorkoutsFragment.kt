@@ -8,9 +8,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.diphrogram.kolsa_test.R
-import com.diphrogram.kolsa_test.common.BaseFragment
-import com.diphrogram.kolsa_test.common.ScreenState
 import com.diphrogram.kolsa_test.databinding.FragmentWorkoutsBinding
+import com.diphrogram.kolsa_test.presentation.common.BaseFragment
+import com.diphrogram.kolsa_test.presentation.common.ScreenState
 import com.diphrogram.kolsa_test.presentation.video.VideoFragment
 import com.diphrogram.kolsa_test.presentation.workouts.components.FilterBottomSheetDialog
 import com.diphrogram.kolsa_test.presentation.workouts.components.ItemDecoration
@@ -46,7 +46,6 @@ class WorkoutsFragment: BaseFragment<FragmentWorkoutsBinding>(
             }
             searchField.doOnTextChanged { text, _, _, _ ->
                 val input = text ?: String.EMPTY
-                println("input: $input")
                 viewModel.filterListByTitle(input.toString())
             }
             filter.text = requireContext().getString(R.string.filter, requireContext().getString(R.string.all))
@@ -83,12 +82,12 @@ class WorkoutsFragment: BaseFragment<FragmentWorkoutsBinding>(
     }
 
     private fun setUIsVisibility(state: WorkoutsModelState) {
-        val uiVisible = state.error.isEmpty()
+        val isUIVisible = state.error.isEmpty()
         with(binding) {
-            textInfo.isVisible = !uiVisible
-            searchLayout.isVisible = uiVisible
-            filter.isVisible = uiVisible
-            if (!uiVisible) {
+            textInfo.isVisible = !isUIVisible
+            searchLayout.isVisible = isUIVisible
+            filter.isVisible = isUIVisible
+            if (!isUIVisible) {
                 textInfo.text = requireContext().getString(R.string.error, state.error)
                 searchField.visibility = View.GONE
                 filter.visibility = View.GONE

@@ -1,9 +1,9 @@
 package com.diphrogram.data.repository.workouts
 
 import com.diphrogram.domain.models.workouts.Workouts
+import com.diphrogram.domain.network.Response
 import com.diphrogram.domain.repository.WorkoutRepository
 import com.diphrogram.domain.repository.workouts.GetWorkoutsUseCase
-import com.diphrogram.utils.network.Response
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext

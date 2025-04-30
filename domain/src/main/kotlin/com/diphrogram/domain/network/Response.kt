@@ -1,4 +1,4 @@
-package com.diphrogram.utils.network
+package com.diphrogram.domain.network
 
 sealed class Response<T> {
 

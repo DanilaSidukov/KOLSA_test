@@ -1,7 +1,7 @@
 package com.diphrogram.domain.repository
 
 import com.diphrogram.domain.models.workouts.Workouts
-import com.diphrogram.utils.network.Response
+import com.diphrogram.domain.network.Response
 import kotlinx.coroutines.flow.Flow
 
 interface WorkoutRepository {

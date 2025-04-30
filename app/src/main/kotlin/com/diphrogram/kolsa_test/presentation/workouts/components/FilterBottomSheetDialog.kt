@@ -7,8 +7,8 @@ import android.view.View
 import android.widget.TextView
 import com.diphrogram.data.models.workouts.WorkoutType
 import com.diphrogram.kolsa_test.R
-import com.diphrogram.kolsa_test.common.BaseBottomSheetDialogFragment
 import com.diphrogram.kolsa_test.databinding.DialogBottomSheetFilterBinding
+import com.diphrogram.kolsa_test.presentation.common.BaseBottomSheetDialogFragment
 import com.diphrogram.kolsa_test.presentation.workouts.getWorkoutTypeValue
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog

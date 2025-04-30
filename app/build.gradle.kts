@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     id(libs.plugins.android.application.get().pluginId)
     id(libs.plugins.kotlin.android.get().pluginId)
@@ -10,6 +13,10 @@ android {
     namespace = "com.diphrogram.kolsa_test"
     compileSdk = BuildParams.COMPILE_SDK
 
+    val localPropertiesFile = rootProject.file("local.properties")
+    val properties = Properties()
+    properties.load(FileInputStream(localPropertiesFile))
+
     defaultConfig {
         applicationId = "com.diphrogram.kolsa_test"
         minSdk = BuildParams.MIN_SDK
@@ -20,10 +27,32 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = file("release_key.jks")
+            storePassword = properties.getProperty("RELEASE_STORE_PASSWORD")
+            keyAlias = properties.getProperty("RELEASE_ALIAS")
+            keyPassword = properties.getProperty("RELEASE_KEY_PASSWORD")
+        }
+        getByName("debug") {
+            storeFile = file("debug_key.jks")
+            storePassword = properties.getProperty("DEBUG_STORE_PASSWORD")
+            keyAlias = properties.getProperty("DEBUG_ALIAS")
+            keyPassword = properties.getProperty("DEBUG_KEY_PASSWORD")
+        }
+    }
+
     buildTypes {
         release {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("release")
+        }
+        debug {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {

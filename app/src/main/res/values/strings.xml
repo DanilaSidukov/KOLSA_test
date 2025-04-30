@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">KOLSA_test</string>
+    <string name="app_name" translatable="false">KOLSA_test</string>
     
 <!--    Common-->
     <string name="empty_result">Ничего не найдено :(</string>
@@ -17,4 +17,7 @@
     <string name="something_went_wrong">Что-то пошло не так</string>
     <string name="input_workout_name">Введите название тренировки</string>
     <string name="filter">Фильтр: %1$s</string>
+
+    <string name="choose_video_quality">Выберите качетсво видео</string>
+    <string name="choose_quality">Выберите качество</string>
 </resources>
