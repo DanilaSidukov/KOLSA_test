@@ -2,10 +2,12 @@ package com.diphrogram.kolsa_test.presentation.workouts
 
 import android.os.Bundle
 import android.view.View
+import androidx.annotation.OptIn
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.media3.common.util.UnstableApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.diphrogram.kolsa_test.R
 import com.diphrogram.kolsa_test.databinding.FragmentWorkoutsBinding
@@ -43,6 +45,7 @@ class WorkoutsFragment: BaseFragment<FragmentWorkoutsBinding>(
         if (searchField.isVisible) {
             clearIcon.setOnClickListener {
                 searchField.text.clear()
+                searchLayout.clearFocus()
             }
             searchField.doOnTextChanged { text, _, _, _ ->
                 val input = text ?: String.EMPTY
@@ -83,14 +86,13 @@ class WorkoutsFragment: BaseFragment<FragmentWorkoutsBinding>(
 
     private fun setUIsVisibility(state: WorkoutsModelState) {
         val isUIVisible = state.error.isEmpty()
+        val isInitialListNotEmpty = state.workoutsList.isNotEmpty()
         with(binding) {
             textInfo.isVisible = !isUIVisible
-            searchLayout.isVisible = isUIVisible
-            filter.isVisible = isUIVisible
+            searchLayout.isVisible = isUIVisible || isInitialListNotEmpty
+            filter.isVisible = isUIVisible || isInitialListNotEmpty
             if (!isUIVisible) {
                 textInfo.text = requireContext().getString(R.string.error, state.error)
-                searchField.visibility = View.GONE
-                filter.visibility = View.GONE
             } else {
                 val type = getWorkoutTypeValue(requireContext(), state.currentFilterType)
                 filter.text = requireContext().getString(R.string.filter, type)
@@ -98,6 +100,7 @@ class WorkoutsFragment: BaseFragment<FragmentWorkoutsBinding>(
         }
     }
 
+    @OptIn(UnstableApi::class)
     override fun onWorkoutClick(id: Int, title: String, description: String?) {
         val videoFragment = VideoFragment.newInstance(id, title, description)
         parentFragmentManager.beginTransaction().apply {

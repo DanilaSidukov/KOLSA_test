@@ -13,6 +13,7 @@ import com.diphrogram.domain.network.Response.Error
 import com.diphrogram.domain.network.Response.Loading
 import com.diphrogram.domain.network.Response.Success
 import com.diphrogram.domain.repository.video.GetVideoUseCase
+import com.diphrogram.kolsa_test.common.data.ResourceProvider
 import com.diphrogram.kolsa_test.presentation.common.BaseViewModel
 import com.diphrogram.kolsa_test.presentation.common.ScreenState
 import com.diphrogram.utils.ZERO
@@ -23,6 +24,7 @@ import javax.inject.Inject
 @HiltViewModel
 class VideoViewModel @Inject constructor(
     private val getVideoUseCase: GetVideoUseCase,
+    private val resourceProvider: ResourceProvider
 ): BaseViewModel<VideoModelState>() {
 
     override fun createInitialState() = VideoModelState()
@@ -67,7 +69,7 @@ class VideoViewModel @Inject constructor(
             val group = trackGroups.get(trackIndex)
             for (groupIndex in Int.ZERO until group.length) {
                 val format = group.getFormat(groupIndex)
-                val label = "${format.height}$CHAR_P (${format.bitrate / 1000} $KB_PER_SECOND)"
+                val label = resourceProvider.getQualityText(format.height, format.bitrate / 1000)
                 items.add(label)
                 trackFormats.add(format)
             }
@@ -81,5 +83,3 @@ class VideoViewModel @Inject constructor(
 }
 
 private const val MOCK_QUALITY = "240p"
-private const val CHAR_P = "p"
-private const val KB_PER_SECOND = "kbps"

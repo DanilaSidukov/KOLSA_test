@@ -17,6 +17,8 @@
     <string name="input_workout_name">Введите название тренировки</string>
     <string name="filter">Фильтр: %1$s</string>
 
+<!--    Video Screen-->
     <string name="choose_video_quality">Выберите качество видео</string>
     <string name="choose_quality">Выберите качество</string>
+    <string name="quality_data">%1$dp (%2$d kbps)</string>
 </resources>

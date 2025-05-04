@@ -8,11 +8,16 @@ import javax.inject.Inject
 interface ResourceProvider {
 
     val emptyResult: String
+
+    fun getQualityText(quality: Int, bitrate: Int): String
 }
 
 class ResourceProviderImpl @Inject constructor(
-    @ApplicationContext context: Context
+    @ApplicationContext private val  context: Context
 ): ResourceProvider {
 
     override val emptyResult = context.getString(R.string.empty_result)
+
+    override fun getQualityText(quality: Int, bitrate: Int) =
+        context.getString(R.string.quality_data, quality, bitrate)
 }

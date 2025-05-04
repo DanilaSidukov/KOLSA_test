@@ -12,6 +12,7 @@ import com.diphrogram.domain.repository.workouts.GetWorkoutsUseCase
 import com.diphrogram.kolsa_test.common.data.ResourceProvider
 import com.diphrogram.kolsa_test.presentation.common.BaseViewModel
 import com.diphrogram.kolsa_test.presentation.common.ScreenState
+import com.diphrogram.utils.EMPTY
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -88,8 +89,15 @@ class WorkoutsViewModel @Inject constructor (
             .filter { it.title.contains(searchText, ignoreCase = true) }
             .filter { filterType == WorkoutType.ALL || it.type == filterType }
 
+        val error = if (filtered.isEmpty()) {
+            resourceProvider.emptyResult
+        } else String.EMPTY
+
         setState {
-            copy(filteredList = filtered)
+            copy(
+                filteredList = filtered,
+                error = error
+            )
         }
     }
 }
